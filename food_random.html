@@ -12,8 +12,10 @@
   <script>
     function SelectFoodType() {
       var foods = [
-        ["Burger King;", "KFC;", "McDonalds;", "Domino;"],
-        ["Mama Kitchen;", "Little Teriyaki;"]
+        ["Burger King;", "KFC;", "McDonalds;", "Domino;", "Taco Bell"],
+        ["Mama Kitchen;", "Little Teriyaki;"],
+        ["Sakura"],
+        ["Kalbi", "Korean BBQ"],
       ];
       //Clear all nodes in html list
       var FoodListForm = document.getElementById("FoodList");
@@ -25,7 +27,7 @@
       // add new nodes to html list
       var FoodSelectedPlainText = document.getElementById("FoodSelected").innerText;
       var index1 = document.getElementById("FoodType").selectedIndex;
-      var FoodListJS = foods[index1 - 1];
+      var FoodListJS = foods[index1];
       for (i = 0; i < FoodListJS.length; i++) {
         var checkboxinput = document.createElement("input");
         checkboxinput.setAttribute("type", "checkbox");
@@ -94,6 +96,9 @@
       btLeft.innerHTML = BattleTwo[0];
       btLeft.onclick = function() {
         btLeft.style.color = "GREEN";
+        btRight.style.color = "RED";
+        btLeft.disabled = true;
+        btRight.disabled = true;
         BattleList.splice(BattleList.indexOf(BattleTwo[1]), 1);
         if (BattleList.length >= 2) {
           AddBattleBts(getRandomArrayElements(BattleList, 2));
@@ -108,6 +113,9 @@
       btRight.innerHTML = BattleTwo[1];
       btRight.onclick = function() {
         btRight.style.color = "GREEN";
+        btLeft.style.color = "RED";
+        btLeft.disabled = true;
+        btRight.disabled = true;
         BattleList.splice(BattleList.indexOf(BattleTwo[0]), 1);
         if (BattleList.length >= 2) {
           AddBattleBts(getRandomArrayElements(BattleList, 2));
@@ -142,9 +150,10 @@
     <tr>
       <td>
         <select id="FoodType" onchange="SelectFoodType()">
-          <option>Choose food type</option>
           <option>Fast Food</option>
           <option>Chinese Food</option>
+          <option>Japanese Food</option>
+          <option>Korean Food</option>
         </select>
       </td>
     </tr>
