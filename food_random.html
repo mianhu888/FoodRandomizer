@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head> 
+  <meta charset="utf-8"> 
+  <title>Food Randomizer</title> 
+  <style>
+    body {
+      text-align: left
+    }
+  </style>
+  <script>
+    function SelectFoodType() {
+      var foods = [
+        ["Burger King;", "KFC;", "McDonalds;", "Domino;"],
+        ["Mama Kitchen;", "Little Teriyaki;"]
+      ];
+      //Clear all nodes in html list
+      var FoodListForm = document.getElementById("FoodList");
+      console.log(FoodListForm);
+      while (FoodListForm.firstChild) {
+        FoodListForm.removeChild(FoodListForm.firstChild);
+      }
+
+      // add new nodes to html list
+      var FoodSelectedPlainText = document.getElementById("FoodSelected").innerText;
+      var index1 = document.getElementById("FoodType").selectedIndex;
+      var FoodListJS = foods[index1 - 1];
+      for (i = 0; i < FoodListJS.length; i++) {
+        var checkboxinput = document.createElement("input");
+        checkboxinput.setAttribute("type", "checkbox");
+        checkboxinput.setAttribute("value", FoodListJS[i]);
+        checkboxinput.setAttribute("Onclick", "SelectSomething()");
+        checkboxinput.innerHTML = FoodListJS[i];
+        if (FoodSelectedPlainText.indexOf(FoodListJS[i]) != -1) {
+          checkboxinput.setAttribute("checked", "true");
+        }
+        FoodListForm.appendChild(checkboxinput);
+
+        var checkLabel = document.createElement("label");
+        checkLabel.innerHTML = FoodListJS[i] + '<br>';
+        FoodListForm.appendChild(checkLabel);
+
+      }
+      //console.log(FoodListForm);
+    }
+
+    function SelectSomething() {
+      var FastFoodForm = document.getElementById("FoodList");
+      var FoodSelected = document.getElementById("FoodSelected");
+      for (i = 0; i < FastFoodForm.length; i++) {
+        if (FastFoodForm[i].type == "checkbox") {
+          var FoodSelectedPlainText = FoodSelected.innerText;
+          if (FastFoodForm[i].checked) {
+            if (FoodSelectedPlainText.indexOf(FastFoodForm[i].value) == -1) {
+              var li = document.createElement("li");
+              li.innerHTML = FastFoodForm[i].value
+              FoodSelected.appendChild(li);
+            }
+          } else {
+            if (FoodSelectedPlainText.indexOf(FastFoodForm[i].value) != -1) {
+              var FoodSelectedList = FoodSelected.childNodes;
+              for (j = 0; j < FoodSelectedList.length; j++) {
+                if (FoodSelectedList[j].innerText == FastFoodForm[i].value) {
+                  FoodSelected.removeChild(FoodSelectedList[j]);
+                  break;
+                }
+              }
+
+            }
+          }
+          //console.log("FoodSelected", FoodSelected.childNodes);
+        }
+      }
+    }
+
+    function getRandomArrayElements(arr, count) {
+      var shuffled = arr.slice(0),
+        i = arr.length,
+        min = i - count,
+        temp, index;
+      while (i-- > min) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+      }
+      return shuffled.slice(min);
+    }
+
+    function AddBattleBts(BattleTwo) {
+
+      var btLeft = document.createElement("button");
+      btLeft.innerHTML = BattleTwo[0];
+      btLeft.onclick = function() {
+        btLeft.style.color = "GREEN";
+        BattleList.splice(BattleList.indexOf(BattleTwo[1]), 1);
+        if (BattleList.length >= 2) {
+          AddBattleBts(getRandomArrayElements(BattleList, 2));
+        } else {
+          alert(BattleList[0]);
+        }
+      };
+      document.body.appendChild(btLeft);
+
+
+      var btRight = document.createElement("button");
+      btRight.innerHTML = BattleTwo[1];
+      btRight.onclick = function() {
+        btRight.style.color = "GREEN";
+        BattleList.splice(BattleList.indexOf(BattleTwo[0]), 1);
+        if (BattleList.length >= 2) {
+          AddBattleBts(getRandomArrayElements(BattleList, 2));
+        } else {
+          alert(BattleList[0]);
+        }
+      };
+      document.body.appendChild(btRight);
+
+
+      var lineBreak = document.createElement("br");
+      btRight.parentNode.insertBefore(lineBreak, btRight.nextSibling);
+    };
+
+
+    var BattleList = [];
+    var BattleRound = 1;
+
+    function Battle() {
+      var FoodSelectedText = document.getElementById("FoodSelected").childNodes;
+      for (j = 0; j < FoodSelectedText.length; j++) {
+        BattleList.push(FoodSelectedText[j].innerText);
+      }
+
+      AddBattleBts(getRandomArrayElements(BattleList, 2));
+    }
+  </script>
+</head>
+
+<body>
+  <table border="1">
+    <tr>
+      <td>
+        <select id="FoodType" onchange="SelectFoodType()">
+          <option>Choose food type</option>
+          <option>Fast Food</option>
+          <option>Chinese Food</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <form id="FoodList">
+          <input type="checkbox" value="Burger King;" onclick="SelectSomething()">Burger King;<br>
+          <input type="checkbox" value="KFC;" onclick="SelectSomething()">KFC;<br>
+          <input type="checkbox" value="McDonalds;" onclick="SelectSomething()">McDonalds;<br>
+          <input type="checkbox" value="Domino;" onclick="SelectSomething()">Domino;
+        </form>
+      </td>
+      <td>Arrow</td>
+      <td>
+        <ul id="FoodSelected"></ul>
+      </td>
+    </tr>
+  </table>
+
+  <button type="button" onclick="Battle()">Random battle!</button><br><br><br>
+</body>
+
+</html>
